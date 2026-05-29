@@ -1,5 +1,16 @@
-import * as snarkjs from "snarkjs";
 import { createHash, randomBytes } from "crypto";
+import { createRequire } from "module";
+
+const requireOptional = createRequire(import.meta.url);
+
+function loadSnarkjs(): any {
+  try {
+    return requireOptional("snarkjs");
+  } catch {
+    throw new Error("snarkjs is not installed. Install it only when running real Groth16 proving: npm install snarkjs @types/snarkjs");
+  }
+}
+
 import type {
   ZkCircuit,
   ZkCircuitTemplate,
@@ -959,6 +970,7 @@ export class ZkSnarkService {
       const wasmBuffer = Buffer.from(circuitWasm, "base64");
       const zkeyBuffer = Buffer.from(circuitZkey, "base64");
 
+      const snarkjs = loadSnarkjs();
       const { proof, publicSignals } = await snarkjs.groth16.fullProve(
         inputs,
         wasmBuffer,
@@ -1005,6 +1017,7 @@ export class ZkSnarkService {
         curve: "bn128",
       };
 
+      const snarkjs = loadSnarkjs();
       const verified = await snarkjs.groth16.verify(vkey, publicSignals, proofObj);
 
       const verificationTimeMs = Date.now() - startTime;
