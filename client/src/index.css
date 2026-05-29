@@ -1,0 +1,286 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   NIURON — Terminal Floor
+   Monospace command-line aesthetic. Always dark.
+   Pure black background, hairline borders, color-coded numerics.
+   ============================================================ */
+
+:root,
+.dark {
+  /* Terminal palette (raw hex anchors)
+     bg     #000000
+     panel  #0a0a0a
+     hair   #333333  (border)
+     muted  #6b7280
+     fg     #ffffff
+     accent #d1d5db
+     green  #22c55e  (positive / supply / verified)
+     amber  #f59e0b  (neutral / swap / warning)
+     red    #ef4444  (negative / error)
+     info   #3b82f6  (shield / private)
+  */
+
+  --background: 0 0% 0%;             /* #000000 */
+  --foreground: 0 0% 100%;           /* #ffffff */
+  --border: 0 0% 20%;                /* #333333 */
+  --input: 0 0% 20%;
+  --ring: 142 71% 45%;               /* green focus ring */
+
+  --card: 0 0% 0%;
+  --card-foreground: 0 0% 100%;
+  --card-border: 0 0% 20%;
+
+  --popover: 0 0% 4%;
+  --popover-foreground: 0 0% 100%;
+  --popover-border: 0 0% 20%;
+
+  --primary: 0 0% 100%;              /* white — used for primary buttons (border + bg) */
+  --primary-foreground: 0 0% 0%;
+
+  --secondary: 0 0% 6%;
+  --secondary-foreground: 0 0% 82%;
+
+  --muted: 0 0% 6%;
+  --muted-foreground: 220 9% 46%;    /* #6b7280 */
+
+  --accent: 0 0% 10%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 84% 60%;          /* #ef4444 */
+  --destructive-foreground: 0 0% 100%;
+
+  --chart-1: 142 71% 45%;
+  --chart-2: 38 92% 50%;
+  --chart-3: 217 91% 60%;
+  --chart-4: 0 84% 60%;
+  --chart-5: 0 0% 82%;
+
+  /* Sidebar tokens — sidebar shell is no longer used,
+     but shadcn ui internals still read them. Keep terminal-consistent. */
+  --sidebar: 0 0% 0%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-border: 0 0% 20%;
+  --sidebar-primary: 0 0% 100%;
+  --sidebar-primary-foreground: 0 0% 0%;
+  --sidebar-accent: 0 0% 7%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-ring: 142 71% 45%;
+
+  /* Semantic role tokens used throughout the app */
+  --privacy: 217 91% 60%;            /* #3b82f6 — SHIELD blue */
+  --privacy-foreground: 0 0% 100%;
+  --success: 142 71% 45%;            /* #22c55e */
+  --success-foreground: 0 0% 0%;
+  --warning: 38 92% 50%;             /* #f59e0b */
+  --warning-foreground: 0 0% 0%;
+
+  /* Fonts — monospace EVERYWHERE */
+  --font-sans: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-serif: "JetBrains Mono", ui-monospace, monospace;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --radius: 0px;
+
+  /* Elevate / outlines used by hover-elevate helpers */
+  --button-outline: rgba(255, 255, 255, 0.10);
+  --badge-outline: rgba(255, 255, 255, 0.06);
+  --opaque-button-border-intensity: 9;
+  --elevate-1: rgba(255, 255, 255, 0.04);
+  --elevate-2: rgba(255, 255, 255, 0.08);
+
+  /* Shadows neutralized — terminal has no shadows */
+  --shadow-2xs: none;
+  --shadow-xs: none;
+  --shadow-sm: none;
+  --shadow: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-xl: none;
+  --shadow-2xl: none;
+
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+
+  --sidebar-primary-border: hsl(0 0% 20%);
+  --sidebar-accent-border: hsl(0 0% 20%);
+  --primary-border: hsl(0 0% 100%);
+  --secondary-border: hsl(0 0% 20%);
+  --muted-border: hsl(0 0% 20%);
+  --accent-border: hsl(0 0% 20%);
+  --destructive-border: hsl(0 84% 60%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    border-radius: 0 !important;
+  }
+
+  html {
+    font-feature-settings: "zero", "ss01";
+  }
+
+  body {
+    @apply font-mono antialiased bg-background text-foreground;
+    text-transform: none;
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  code, kbd, samp, pre {
+    font-family: var(--font-mono);
+    letter-spacing: 0;
+    font-weight: 700;
+  }
+
+  /* Numeric stats — large, tabular, white */
+  [data-testid^="text-stat-"],
+  [data-testid^="text-shadow-balance"] {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /* Terminal-style scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #000; }
+  ::-webkit-scrollbar-thumb { background: #333; }
+  ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+  ::selection {
+    background: #ffffff;
+    color: #000000;
+  }
+}
+
+@layer utilities {
+  /* Bracketed section header — [PORTFOLIO::ASSETS] style */
+  .term-tag {
+    color: hsl(var(--muted-foreground));
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 0.75rem;
+  }
+
+  .term-divider {
+    border-color: #333;
+  }
+
+  .term-hairline {
+    border: 1px solid #333;
+  }
+
+  .term-grid-bg {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  /* Legacy class — neutralized so old pages don't break */
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .glass-panel {
+    background: #000;
+    border: 1px solid #333;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .text-brand-gradient { color: #ffffff; }
+  .bg-brand-gradient { background: #ffffff; color: #000; }
+  .border-brand-gradient { border-color: #333; }
+  .glow-brand, .glow-brand-sm { box-shadow: none; }
+
+  .terminal-prompt::before {
+    content: "> ";
+    color: #22c55e;
+    font-weight: 700;
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    @apply hidden;
+  }
+
+  [contenteditable][data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: hsl(var(--muted-foreground));
+    pointer-events: none;
+  }
+
+  .no-default-hover-elevate {}
+  .no-default-active-elevate {}
+
+  .toggle-elevate::before,
+  .toggle-elevate-2::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: -1;
+  }
+
+  .toggle-elevate.toggle-elevated::before {
+    background-color: var(--elevate-2);
+  }
+
+  .border.toggle-elevate::before { inset: -1px; }
+
+  .hover-elevate:not(.no-default-hover-elevate),
+  .active-elevate:not(.no-default-active-elevate),
+  .hover-elevate-2:not(.no-default-hover-elevate),
+  .active-elevate-2:not(.no-default-active-elevate) {
+    position: relative;
+    z-index: 0;
+  }
+
+  .hover-elevate:not(.no-default-hover-elevate)::after,
+  .active-elevate:not(.no-default-active-elevate)::after,
+  .hover-elevate-2:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:not(.no-default-active-elevate)::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: 999;
+  }
+
+  .hover-elevate:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate:active:not(.no-default-active-elevate)::after {
+    background-color: var(--elevate-1);
+  }
+
+  .hover-elevate-2:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:active:not(.no-default-active-elevate)::after {
+    background-color: var(--elevate-2);
+  }
+
+  .border.hover-elevate:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate:not(.no-active-interaction-elevate)::after,
+  .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
+  .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
+    inset: -1px;
+  }
+}
+
+/* Subtle blink for cursor / live indicators */
+@keyframes term-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+.animate-term-blink { animation: term-blink 1s steps(1) infinite; }
+
+/* Neutralize legacy animations */
+.animate-niuron-pulse,
+.animate-niuron-shimmer { animation: none; }
