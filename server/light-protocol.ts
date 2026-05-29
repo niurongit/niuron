@@ -96,39 +96,8 @@ export class LightProtocolService {
     let proverAvailable = false;
     let network: "mainnet" | "devnet" | "localnet" | "simulation" = "simulation";
 
-    try {
-      const { createRpc } = await import("@lightprotocol/stateless.js");
-      sdkAvailable = true;
-
-      if (this.rpcEndpoint) {
-        try {
-          const rpc = createRpc(this.rpcEndpoint, this.rpcEndpoint);
-          
-          const testCheck = await Promise.race([
-            this.testRpcConnection(rpc),
-            new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 5000))
-          ]);
-
-          rpcConnected = testCheck;
-
-          if (rpcConnected) {
-            if (this.rpcEndpoint.includes("mainnet")) {
-              network = "mainnet";
-            } else if (this.rpcEndpoint.includes("devnet")) {
-              network = "devnet";
-            } else {
-              network = "devnet";
-            }
-
-            proverAvailable = await this.testProverAvailability(rpc);
-          }
-        } catch (error) {
-          console.log("Light Protocol RPC connection failed, using simulation mode:", error);
-        }
-      }
-    } catch (error) {
-      console.log("Light Protocol SDK not available, using simulation mode:", error);
-    }
+    // Base-only build: Light Protocol is Solana-specific and intentionally not
+    // bundled. Keep the capability contract stable while forcing simulator mode.
 
     this.capabilities = {
       sdkAvailable,
@@ -139,9 +108,9 @@ export class LightProtocolService {
       supportsDecoyTransactions: true,
       maxDecoyCount: 10,
       supportedTokens: [
-        "So11111111111111111111111111111111111111112",
-        "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
-        "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+        "0x4200000000000000000000000000000000000006",
+        "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA",
       ],
       network,
       lastChecked: now,
@@ -174,34 +143,7 @@ export class LightProtocolService {
             
             console.log(`Prover test: Indexer slot ${indexerSlot} confirmed`);
 
-            throw new Error("Solana RPC path disabled on Base build");
-            const { bn } = await import("@lightprotocol/stateless.js");
-
-            const testOwners = [
-              "cTokenmWW8bLPjZEBAUgYy3zKxQZW6VKi7bqNFEVv3m",
-              "Lighton6oQpVkeewmo2mcPTQQp7kYHr4fWpAgJyEmDX",
-            ];
-
-            for (const ownerStr of testOwners) {
-              try {
-                const owner: any = ownerStr;
-                const accounts = await rpc.getCompressedAccountsByOwner(owner);
-                
-                if (accounts?.items?.length > 0) {
-                  const hashes = accounts.items.slice(0, 1).map((acc: any) => bn(acc.hash));
-                  const proof = await rpc.getValidityProof(hashes);
-                  
-                  if (proof?.compressedProof) {
-                    console.log("Prover test: Successfully generated validity proof, prover available");
-                    return true;
-                  }
-                }
-              } catch (err: any) {
-                console.log(`Prover test: Account check for ${ownerStr} failed:`, err?.message);
-              }
-            }
-
-            console.log("Prover test: Could not verify proof generation, defaulting to simulator");
+            console.log("Prover test: Light Protocol disabled in Base-only build; using simulator");
             return false;
           } catch (err: any) {
             console.log("Prover test: Check failed with error:", err?.message);
@@ -282,42 +224,8 @@ export class LightProtocolService {
     return snapshot;
   }
 
-  private async syncStateTreeFromSdk(walletAddress: string): Promise<StateTreeSnapshot> {
-    const { createRpc, bn } = await import("@lightprotocol/stateless.js");
-    throw new Error("Solana RPC path disabled on Base build");
-
-    const rpc = createRpc(this.rpcEndpoint!, this.rpcEndpoint!);
-    
-    const owner: any = walletAddress;
-    const accounts = await rpc.getCompressedAccountsByOwner(owner);
-
-    let stateRoot: string;
-    let leafCount = accounts.items?.length || 0;
-
-    if (leafCount > 0) {
-      const hashes = accounts.items.slice(0, 2).map((acc: any) => bn(acc.hash));
-      try {
-        const validityProof = await rpc.getValidityProof(hashes);
-        stateRoot = validityProof.roots?.[0]?.toString() || 
-          createHash("sha256").update(`real_root:${walletAddress}:${Date.now()}`).digest("hex");
-      } catch {
-        stateRoot = createHash("sha256")
-          .update(`accounts_root:${walletAddress}:${Date.now()}`)
-          .digest("hex");
-      }
-    } else {
-      stateRoot = createHash("sha256")
-        .update(`empty_tree:${walletAddress}:${Date.now()}`)
-        .digest("hex");
-    }
-
-    return {
-      root: stateRoot,
-      height: 20,
-      leafCount,
-      timestamp: Date.now(),
-      isRealData: true,
-    };
+  private async syncStateTreeFromSdk(_walletAddress: string): Promise<StateTreeSnapshot> {
+    throw new Error("Light Protocol SDK is disabled in the Base-only build");
   }
 
   async generateProof(input: ProofInput): Promise<ProofOutput> {
@@ -357,58 +265,8 @@ export class LightProtocolService {
   }
 
   private async generateRealProof(input: ProofInput): Promise<ProofOutput> {
-    try {
-      const { createRpc, bn } = await import("@lightprotocol/stateless.js");
-      throw new Error("Solana RPC path disabled on Base build");
-
-      const rpc = createRpc(this.rpcEndpoint!, this.rpcEndpoint!);
-
-      const hashes = input.inputNotes.slice(0, 4).map(note => 
-        bn(Buffer.from(note, 'hex'))
-      );
-
-      if (hashes.length === 0) {
-        throw new Error("No input notes to generate proof for");
-      }
-
-      const validityProof = await rpc.getValidityProof(hashes);
-
-      const nullifiers = input.inputNotes.map((note) =>
-        this.generateNullifier(note, this.generateRandomness())
-      );
-
-      const outputCommitments = input.outputNotes.map((note) =>
-        createHash("sha256").update(`output:${note}:${Date.now()}`).digest("hex")
-      );
-
-      const proofData = {
-        protocol: "light_protocol_zk",
-        isReal: true,
-        curve: "bn254",
-        publicInputs: input.publicInputs,
-        nullifiers,
-        outputCommitments,
-        proof: {
-          compressedProof: validityProof.compressedProof,
-          roots: validityProof.roots,
-          rootIndices: validityProof.rootIndices,
-          leafIndices: validityProof.leafIndices,
-        },
-        timestamp: Date.now(),
-      };
-
-      return {
-        proofData: JSON.stringify(proofData),
-        nullifiers,
-        outputCommitments,
-        success: true,
-        isRealProof: true,
-        proofType: "real_zk",
-      };
-    } catch (error) {
-      console.log("Real proof generation failed, falling back to simulation:", error);
-      return this.generateSimulatedProof(input);
-    }
+    console.log("Real Light Protocol proofs are disabled in the Base-only build; using simulator");
+    return this.generateSimulatedProof(input);
   }
 
   private async generateSimulatedProof(input: ProofInput): Promise<ProofOutput> {
