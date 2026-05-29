@@ -1678,7 +1678,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         txType,
         tokenMint: tokenMint || null,
         tokenSymbol: tokenSymbol || null,
-        amount: amount ? parseFloat(amount) : null,
+        amount: amount !== undefined && amount !== null ? Number(amount) : null,
         recipientAddress: recipientAddress || null,
         description,
         requiredApprovals: wallet.threshold,
@@ -2838,18 +2838,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const { lightProtocolService } = await import("./light-protocol");
-      const isValid = await lightProtocolService.verifyProof(session.proofData);
+      const verification = await lightProtocolService.verifyProof(session.proofData);
 
       await storage.updateZkExecutionSession(sessionId, {
-        proofStatus: isValid ? "verified" : "failed",
-        verificationResult: isValid,
+        proofStatus: verification.isValid ? "verified" : "failed",
+        verificationResult: verification.isValid,
         verificationTimestamp: new Date(),
       });
 
       res.json({
-        success: isValid,
+        success: verification.isValid,
         sessionId,
-        verified: isValid,
+        verified: verification.isValid,
+        isRealVerification: verification.isRealVerification,
         verifiedAt: new Date().toISOString(),
       });
     } catch (error) {

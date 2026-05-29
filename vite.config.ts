@@ -115,15 +115,11 @@ export default defineConfig({
       "react-dom": path.resolve(import.meta.dirname, "node_modules/react-dom"),
       "dayjs/locale": path.resolve(
         import.meta.dirname,
-        "node_modules/dayjs/esm/locale",
+        "node_modules/dayjs/locale",
       ),
       "dayjs/plugin": path.resolve(
         import.meta.dirname,
-        "node_modules/dayjs/esm/plugin",
-      ),
-      dayjs: path.resolve(
-        import.meta.dirname,
-        "node_modules/dayjs/esm/index.js",
+        "node_modules/dayjs/plugin",
       ),
     },
   },
