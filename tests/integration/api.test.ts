@@ -1,6 +1,7 @@
 import express from "express";
 import request from "supertest";
 import { beforeAll, describe, expect, it, vi } from "vitest";
+import { expectWalletTransactionPayload } from "../helpers/baseTransaction";
 
 process.env.DATABASE_URL ||= "postgresql://niuron:niuron@localhost:5432/niuron_test";
 process.env.SESSION_SECRET ||= "test-session-secret-00000000000000000000000000000000";
@@ -72,6 +73,56 @@ describe("Niuron API integration baseline", () => {
     const res = await request(app).get("/api/swap/quote").expect(400);
 
     expect(res.body.error).toContain("Missing required parameters");
+  });
+
+  it("builds a wallet-signable Base swap transaction from an aggregator quote", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          code: 200,
+          data: {
+            inAmount: "1.5",
+            outAmount: "1498.250000",
+            minOutAmount: "1490.758750",
+            estimatedGas: "185000",
+            to: "0x111111125421ca6dc452d289314280a0f8842a65",
+            data: "0x12aa3caf0000000000000000000000000000000000000000000000000000000000000000",
+            value: "0",
+            gasPrice: "1000000",
+            price_impact: "0.02",
+          },
+        }),
+        { status: 200, headers: { "content-type": "application/json" } },
+      ),
+    );
+
+    const res = await request(app)
+      .get("/api/swap/quote")
+      .query({
+        sellToken: "0x4200000000000000000000000000000000000006",
+        buyToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        amount: "1.5",
+        slippage: "0.5",
+        taker: "0x0000000000000000000000000000000000000001",
+      })
+      .expect(200);
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const quoteUrl = new URL(String(fetchMock.mock.calls[0][0]));
+    expect(quoteUrl.hostname).toBe("open-api.openocean.finance");
+    expect(quoteUrl.pathname).toBe("/v3/base/swap_quote");
+    expect(quoteUrl.searchParams.get("amount")).toBe("1.5");
+    expect(quoteUrl.searchParams.get("account")).toBe("0x0000000000000000000000000000000000000001");
+
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        router: "OpenOcean",
+        inAmount: "1.5",
+        value: "0",
+        priceImpact: 0.02,
+      }),
+    );
+    expectWalletTransactionPayload(res.body);
   });
 
   it("returns Base Aave reserve metadata", async () => {
