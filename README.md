@@ -6,11 +6,11 @@
 
 ### `Confidential finance, executed quietly.`
 
-**A privacy-first DeFi terminal on Base — swap, earn, and pay without broadcasting your net worth.**
+**A beta privacy-first DeFi terminal on Base — swap, earn, and pay with selective-disclosure workflows under active development.**
 
 <br/>
 
-[![Live on Base](https://img.shields.io/badge/LIVE_ON-BASE-0052FF?style=for-the-badge&logo=coinbase&logoColor=white)](https://base.org)
+[![Beta on Base](https://img.shields.io/badge/BETA_ON-BASE-0052FF?style=for-the-badge&logo=coinbase&logoColor=white)](https://base.org)
 [![License](https://img.shields.io/badge/LICENSE-MIT-22c55e?style=for-the-badge)](#-license)
 [![Non-Custodial](https://img.shields.io/badge/CUSTODY-SELF-f59e0b?style=for-the-badge&logo=ethereum&logoColor=white)](#-security)
 [![Status](https://img.shields.io/badge/STATUS-BETA-3b82f6?style=for-the-badge)](#-roadmap)
@@ -63,15 +63,15 @@
 
 ## ▍Overview
 
-**Niuron** is a non-custodial, privacy-focused DeFi dashboard built on **Base** (an Ethereum L2). It adds a confidentiality layer on top of proven protocols like **Aave V3** and **OpenOcean**, so you can move, grow, and spend on-chain without leaking your balances to the entire world by default — and selectively disclose only when *you* choose.
+**Niuron** is a non-custodial, privacy-focused DeFi dashboard built on **Base** (an Ethereum L2). It is building a confidentiality layer around Base DeFi workflows and selective disclosure. OpenOcean and Aave paths are being integrated progressively, while ZK-heavy flows currently use simulator-backed commitments until production proving infrastructure is complete.
 
-> **You hold the keys. You sign every transaction. Niuron never touches your funds.**
+> **Beta status:** you hold the keys and sign wallet transactions; privacy/proof modules are still under active hardening and should not be treated as audited production privacy.
 
 <div align="center">
 
 | Privacy | Performance | Built On | Custody |
 |:---:|:---:|:---:|:---:|
-| Shielded by default | ~2s Base blocks | Audited protocols | 100% self |
+| Selective disclosure WIP | ~2s Base blocks | Base ecosystem | 100% self-custody target |
 
 </div>
 
@@ -82,11 +82,11 @@
 | Module | Description |
 |---|---|
 | **Dashboard** | Unified terminal view of public + shadow balances, activity, and batched actions. |
-| **Private Swaps** | Best-rate token swaps aggregated via **OpenOcean**, executed on Base. |
-| **Yield** | Supply assets to **Aave V3** reserves and track strategies & APY. |
-| **Stealth / Shadow Balances** | Move funds between public and shielded states. |
+| **Private Swaps** | OpenOcean quote + wallet-signing flow under active integration. |
+| **Yield** | Aave V3 reserve discovery and strategy tracking under active integration. |
+| **Stealth / Shadow Balances** | Simulator-backed shielded accounting while production privacy rails are built. |
 | **Selective Disclosure** | Generate verifiable proofs to disclose balances on demand. |
-| **ZK-SNARK Engine** | Client-side zero-knowledge proof generation for balances. |
+| **ZK-SNARK Engine** | snarkjs/circuit workflow scaffold plus simulator-backed proof endpoints. |
 | **Multisig** | Coordinate multi-signature actions. |
 | **Smart Routing** | Optimized transaction routing across protocols. |
 | **Analytics** | PnL, volume, trade history, and activity breakdowns. |
@@ -140,13 +140,13 @@
 
 | Integration | Role | Status |
 |---|---|:---:|
-| **Base** | Settlement layer (Ethereum L2) | `LIVE` |
-| **wagmi / viem** | Contract reads, writes, signing | `LIVE` |
-| **ConnectKit** | Wallet connection UX | `LIVE` |
-| **OpenOcean** | DEX aggregation for swaps | `LIVE` |
-| **Aave V3** | Lending / yield reserves | `LIVE` |
-| **Neon Postgres** | App data & audit storage | `LIVE` |
-| **ZK-SNARK Engine** | Privacy proofs | `BETA` |
+| **Base** | Settlement layer (Ethereum L2) | `BETA` |
+| **wagmi / viem** | Contract reads, writes, signing | `BETA` |
+| **ConnectKit** | Wallet connection UX | `BETA` |
+| **OpenOcean** | DEX aggregation for swaps | `WIP` |
+| **Aave V3** | Lending / yield reserves | `WIP` |
+| **Neon Postgres** | App data & audit storage | `BETA` |
+| **ZK-SNARK Engine** | Privacy proofs | `SIMULATOR / WIP` |
 
 </div>
 
@@ -425,7 +425,7 @@ Released under the **MIT License**. See [`LICENSE`](LICENSE) for details.
 
 <img src="./logo.png" alt="Niuron" width="56" height="56" />
 
-**Built with privacy in mind · Powered by Base**
+**Built with privacy in mind · Beta on Base**
 
 `> niuron --connect --private`
 
