@@ -11,14 +11,9 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
-    "@coral-xyz/anchor": "^0.32.1",
     "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",
-    "@lightprotocol/compressed-token": "^0.22.0",
-    "@lightprotocol/stateless.js": "^0.22.0",
     "@neondatabase/serverless": "^0.10.4",
-    "@orca-so/common-sdk": "^0.7.0",
-    "@orca-so/whirlpools-sdk": "^0.17.0",
     "@radix-ui/react-accordion": "^1.2.4",
     "@radix-ui/react-alert-dialog": "^1.1.7",
     "@radix-ui/react-aspect-ratio": "^1.1.3",
