@@ -17,7 +17,7 @@
 
 <br/>
 
-[**🚀 Launch App**](#-quick-start) &nbsp;·&nbsp; [**📖 Docs**](#-documentation) &nbsp;·&nbsp; [**🧩 Integrations**](#-integrations) &nbsp;·&nbsp; [**🗺 Roadmap**](#-roadmap) &nbsp;·&nbsp; [**💬 Community**](#-community--socials)
+[**Launch App**](#-quick-start) &nbsp;·&nbsp; [**Docs**](#-documentation) &nbsp;·&nbsp; [**Integrations**](#-integrations) &nbsp;·&nbsp; [**Roadmap**](#-roadmap) &nbsp;·&nbsp; [**Community**](#-community--socials)
 
 </div>
 
@@ -25,19 +25,39 @@
 
 ## ▍Table of Contents
 
-- [Overview](#-overview)
-- [Key Features](#-key-features)
-- [Tech Stack](#-tech-stack)
-- [Integrations](#-integrations)
-- [Architecture](#-architecture)
-- [Privacy Flow](#-privacy-flow)
-- [Quick Start](#-quick-start)
-- [Project Structure](#-project-structure)
-- [API Reference](#-api-reference)
-- [Roadmap](#-roadmap)
-- [Security](#-security)
-- [Community & Socials](#-community--socials)
-- [License](#-license)
+<table>
+  <tr>
+    <td width="33%" valign="top">
+
+`01` &nbsp; [Overview](#-overview)
+`02` &nbsp; [Key Features](#-key-features)
+`03` &nbsp; [Tech Stack](#-tech-stack)
+`04` &nbsp; [Integrations](#-integrations)
+`05` &nbsp; [Architecture](#-architecture)
+
+</td>
+    <td width="33%" valign="top">
+
+`06` &nbsp; [Privacy Flow](#-privacy-flow)
+`07` &nbsp; [Quick Start](#-quick-start)
+`08` &nbsp; [Project Structure](#-project-structure)
+`09` &nbsp; [API Reference](#-api-reference)
+`10` &nbsp; [Roadmap](#-roadmap)
+
+</td>
+    <td width="33%" valign="top">
+
+`11` &nbsp; [Security](#-security)
+`12` &nbsp; [Community & Socials](#-community--socials)
+`13` &nbsp; [License](#-license)
+
+<br/>
+
+[![Back to top](https://img.shields.io/badge/▲_TOP-0a0a0a?style=flat-square)](#niuron)
+
+</td>
+  </tr>
+</table>
 
 ---
 
@@ -49,7 +69,7 @@
 
 <div align="center">
 
-| 🔐 Privacy | ⚡ Performance | 🧱 Built On | 🛡 Custody |
+| Privacy | Performance | Built On | Custody |
 |:---:|:---:|:---:|:---:|
 | Shielded by default | ~2s Base blocks | Audited protocols | 100% self |
 
@@ -61,16 +81,16 @@
 
 | Module | Description |
 |---|---|
-| 🧮 **Dashboard** | Unified terminal view of public + shadow balances, activity, and batched actions. |
-| 🔄 **Private Swaps** | Best-rate token swaps aggregated via **OpenOcean**, executed on Base. |
-| 🌾 **Yield** | Supply assets to **Aave V3** reserves and track strategies & APY. |
-| 👻 **Stealth / Shadow Balances** | Move funds between public and shielded states. |
-| 🧾 **Selective Disclosure** | Generate verifiable proofs to disclose balances on demand. |
-| 🔏 **ZK-SNARK Engine** | Client-side zero-knowledge proof generation for balances. |
-| 👥 **Multisig** | Coordinate multi-signature actions. |
-| 🧭 **Smart Routing** | Optimized transaction routing across protocols. |
-| 📊 **Analytics** | PnL, volume, trade history, and activity breakdowns. |
-| ⚖️ **Compliance** | Configurable rules + exportable audit trail. |
+| **Dashboard** | Unified terminal view of public + shadow balances, activity, and batched actions. |
+| **Private Swaps** | Best-rate token swaps aggregated via **OpenOcean**, executed on Base. |
+| **Yield** | Supply assets to **Aave V3** reserves and track strategies & APY. |
+| **Stealth / Shadow Balances** | Move funds between public and shielded states. |
+| **Selective Disclosure** | Generate verifiable proofs to disclose balances on demand. |
+| **ZK-SNARK Engine** | Client-side zero-knowledge proof generation for balances. |
+| **Multisig** | Coordinate multi-signature actions. |
+| **Smart Routing** | Optimized transaction routing across protocols. |
+| **Analytics** | PnL, volume, trade history, and activity breakdowns. |
+| **Compliance** | Configurable rules + exportable audit trail. |
 
 ---
 
@@ -99,19 +119,19 @@
 
 > Click any badge to open the integration's site.
 
-### ⛓ Chain & Wallet
+### Chain & Wallet
 
 [![Base](https://img.shields.io/badge/Base-Ethereum_L2-0052FF?style=for-the-badge&logo=coinbase&logoColor=white)](https://base.org)
 [![wagmi](https://img.shields.io/badge/wagmi-React_Hooks-1C1B1B?style=for-the-badge)](https://wagmi.sh)
 [![viem](https://img.shields.io/badge/viem-TS_Client-FFFFFF?style=for-the-badge&logoColor=black)](https://viem.sh)
 [![ConnectKit](https://img.shields.io/badge/ConnectKit-Wallet_UI-1A1B1F?style=for-the-badge)](https://docs.family.co/connectkit)
 
-### 💱 DeFi Protocols
+### DeFi Protocols
 
 [![OpenOcean](https://img.shields.io/badge/OpenOcean-Swap_Aggregator-3F4350?style=for-the-badge)](https://openocean.finance)
 [![Aave V3](https://img.shields.io/badge/Aave_V3-Yield-B6509E?style=for-the-badge&logo=aave&logoColor=white)](https://aave.com)
 
-### 🗄 Infrastructure
+### Infrastructure
 
 [![Neon](https://img.shields.io/badge/Neon-Serverless_Postgres-00E599?style=for-the-badge&logo=postgresql&logoColor=white)](https://neon.tech)
 [![Drizzle](https://img.shields.io/badge/Drizzle-ORM-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black)](https://orm.drizzle.team)
@@ -120,13 +140,13 @@
 
 | Integration | Role | Status |
 |---|---|:---:|
-| **Base** | Settlement layer (Ethereum L2) | ✅ Live |
-| **wagmi / viem** | Contract reads, writes, signing | ✅ Live |
-| **ConnectKit** | Wallet connection UX | ✅ Live |
-| **OpenOcean** | DEX aggregation for swaps | ✅ Live |
-| **Aave V3** | Lending / yield reserves | ✅ Live |
-| **Neon Postgres** | App data & audit storage | ✅ Live |
-| **ZK-SNARK Engine** | Privacy proofs | 🟡 Beta |
+| **Base** | Settlement layer (Ethereum L2) | `LIVE` |
+| **wagmi / viem** | Contract reads, writes, signing | `LIVE` |
+| **ConnectKit** | Wallet connection UX | `LIVE` |
+| **OpenOcean** | DEX aggregation for swaps | `LIVE` |
+| **Aave V3** | Lending / yield reserves | `LIVE` |
+| **Neon Postgres** | App data & audit storage | `LIVE` |
+| **ZK-SNARK Engine** | Privacy proofs | `BETA` |
 
 </div>
 
@@ -136,25 +156,25 @@
 
 ```mermaid
 flowchart TD
-    subgraph Client["🖥 Client — React + Vite"]
+    subgraph Client["Client — React + Vite"]
         UI["Terminal UI<br/>(shadcn + Tailwind)"]
         Q["TanStack Query"]
         W3["wagmi · viem · ConnectKit"]
     end
 
-    subgraph Server["⚙️ Server — Express"]
+    subgraph Server["Server — Express"]
         API["REST API"]
         ZK["ZK-SNARK Service"]
         STORE["Drizzle ORM"]
     end
 
-    subgraph Chain["⛓ Base — Ethereum L2"]
+    subgraph Chain["Base — Ethereum L2"]
         OO["OpenOcean<br/>Aggregator"]
         AV["Aave V3<br/>Reserves"]
     end
 
-    DB[("🗄 Neon Postgres")]
-    WALLET["👛 User Wallet<br/>(self-custody)"]
+    DB[("Neon Postgres")]
+    WALLET["User Wallet<br/>(self-custody)"]
 
     UI --> Q --> API
     UI --> W3 --> WALLET
@@ -275,7 +295,7 @@ niuron/
 ## ▍API Reference
 
 <details>
-<summary><b>📊 Portfolio</b></summary>
+<summary><b>Portfolio</b></summary>
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -286,7 +306,7 @@ niuron/
 </details>
 
 <details>
-<summary><b>👻 Shadow Balances</b></summary>
+<summary><b>Shadow Balances</b></summary>
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -297,7 +317,7 @@ niuron/
 </details>
 
 <details>
-<summary><b>🔄 Swap (OpenOcean)</b></summary>
+<summary><b>Swap (OpenOcean)</b></summary>
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -309,7 +329,7 @@ niuron/
 </details>
 
 <details>
-<summary><b>🌾 Yield (Aave V3)</b></summary>
+<summary><b>Yield (Aave V3)</b></summary>
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -320,7 +340,7 @@ niuron/
 </details>
 
 <details>
-<summary><b>🔏 ZK & Disclosure</b></summary>
+<summary><b>ZK & Disclosure</b></summary>
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -332,7 +352,7 @@ niuron/
 </details>
 
 <details>
-<summary><b>⚖️ Compliance & Analytics</b></summary>
+<summary><b>Compliance & Analytics</b></summary>
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -358,21 +378,21 @@ timeline
 
 | Phase | Milestone | Status |
 |---|---|:---:|
-| 1 | Foundation & wallet | ✅ Live |
-| 2 | Core DeFi (swap + yield) | ✅ Live |
-| 3 | Privacy layer (ZK) | 🟡 In Progress |
-| 4 | Scale (multisig, routing) | ⚪ Planned |
+| 1 | Foundation & wallet | `LIVE` |
+| 2 | Core DeFi (swap + yield) | `LIVE` |
+| 3 | Privacy layer (ZK) | `IN PROGRESS` |
+| 4 | Scale (multisig, routing) | `PLANNED` |
 
 ---
 
 ## ▍Security
 
-- 🔑 **Non-custodial** — you control your keys; every transaction is user-signed.
-- 🧱 **Proven protocols** — built on audited, battle-tested Aave V3 + OpenOcean liquidity.
-- 🔏 **Client-side proofs** — ZK proofs generated locally; minimal data leaves your device.
-- 🙈 **Private by default** — balances are shielded unless you choose to disclose.
+- **Non-custodial** — you control your keys; every transaction is user-signed.
+- **Proven protocols** — built on audited, battle-tested Aave V3 + OpenOcean liquidity.
+- **Client-side proofs** — ZK proofs generated locally; minimal data leaves your device.
+- **Private by default** — balances are shielded unless you choose to disclose.
 
-> ⚠️ **Disclaimer:** Niuron is experimental software provided "as is", without warranty. DeFi carries financial risk. Always do your own research and never invest more than you can afford to lose.
+> **Disclaimer:** Niuron is experimental software provided "as is", without warranty. DeFi carries financial risk. Always do your own research and never invest more than you can afford to lose.
 
 ---
 
@@ -388,7 +408,7 @@ timeline
 
 </div>
 
-> 🔗 Replace the links above with your official channels.
+> Replace the links above with your official channels.
 
 ### Documentation
 
