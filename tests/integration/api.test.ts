@@ -1,6 +1,6 @@
 import express from "express";
 import request from "supertest";
-import { beforeAll, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { expectWalletTransactionPayload } from "../helpers/baseTransaction";
 
 process.env.DATABASE_URL ||= "postgresql://niuron:niuron@localhost:5432/niuron_test";
@@ -57,6 +57,10 @@ describe("Niuron API integration baseline", () => {
   let app: express.Express;
   let server: Awaited<ReturnType<typeof registerRoutes>>;
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   beforeAll(async () => {
     app = createTestApp();
     server = await registerRoutes(app);
@@ -73,6 +77,44 @@ describe("Niuron API integration baseline", () => {
     const res = await request(app).get("/api/swap/quote").expect(400);
 
     expect(res.body.error).toContain("Missing required parameters");
+  });
+
+  it("rejects invalid swap amounts before calling the aggregator", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch");
+
+    await request(app)
+      .get("/api/swap/quote")
+      .query({
+        sellToken: "0x4200000000000000000000000000000000000006",
+        buyToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        amount: "1e18",
+      })
+      .expect(400);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("maps malformed aggregator responses to a service-unavailable error", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response("not-json", { status: 200, headers: { "content-type": "text/plain" } }),
+    );
+
+    const res = await request(app)
+      .get("/api/swap/quote")
+      .query({
+        sellToken: "0x4200000000000000000000000000000000000006",
+        buyToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        amount: "1.5",
+      })
+      .expect(503);
+
+    expect(res.body.error).toBe("Invalid response from aggregator");
+  });
+
+  it("keeps backend transaction broadcasting endpoints disabled on Base", async () => {
+    await request(app).post("/api/swap/transaction").expect(410);
+    await request(app).post("/api/swap/send").expect(410);
+    await request(app).post("/api/swap/confirm").expect(410);
   });
 
   it("builds a wallet-signable Base swap transaction from an aggregator quote", async () => {
