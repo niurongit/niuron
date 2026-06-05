@@ -1,6 +1,6 @@
 // Migrated to Base (Ethereum L2). This module previously wrapped Solana RPC +
 // Jupiter aggregator. It now exposes Base-compatible stubs so the rest of the
-// server keeps compiling while the matching endpoints (jupiter-swap, escrow,
+// server keeps compiling while the matching endpoints (legacy-swap, escrow,
 // stealth-deposit, etc.) are explicitly deprecated in routes.ts.
 //
 // No `@solana/web3.js` or `@solana/spl-token` imports remain.
@@ -29,7 +29,7 @@ export const connection = {
   rpcEndpoint: "https://mainnet.base.org",
 } as const;
 
-export async function getSolBalance(_walletAddress: string): Promise<number> {
+export async function getBaseEthBalance(_walletAddress: string): Promise<number> {
   return 0;
 }
 

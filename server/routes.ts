@@ -30,7 +30,7 @@ import {
   buildClaimTransaction,
   executeClaimTransaction,
   getEscrowPublicKey,
-} from "./solana";
+} from "./base";
 import { zkProofService } from "./zk-proof";
 import { yieldProtocolsService } from "./yield-protocols";
 import {
@@ -455,7 +455,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           if (transactionData || selectedItems.length > 0) {
             const txData = transactionData || { 
               txSignature: selectedItems[0], 
-              fromToken: "SOL", 
+              fromToken: "ETH", 
               toToken: "USDC", 
               amount: 0 
             };
@@ -477,7 +477,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           zkProof = await zkProofService.generateOwnershipProof(
             walletAddress,
             "wallet",
-            "solana-wallet"
+            "evm-wallet"
           );
           proofHash = zkProof.proofHash;
           commitment = zkProof.commitment;

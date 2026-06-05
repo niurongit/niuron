@@ -89,7 +89,7 @@ import {
   type ActivityBreakdown,
   type TradeRecord,
 } from "@shared/schema";
-import { getWalletTokenData, TOKEN_MINTS, MINT_TO_SYMBOL } from "./solana";
+import { getWalletTokenData, TOKEN_MINTS, MINT_TO_SYMBOL } from "./base";
 
 export interface IStorage {
   // Portfolio (computed from chain)
