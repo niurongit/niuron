@@ -12,8 +12,14 @@ export const swapOrders = pgTable("swap_orders", {
   walletAddress: text("wallet_address").notNull(),
   fromToken: text("from_token").notNull(),
   toToken: text("to_token").notNull(),
+  // Legacy human-readable floats kept for backward-compatible UI reads.
+  // Exact token accounting must use the *_base_units columns below.
   fromAmount: real("from_amount").notNull(),
   toAmount: real("to_amount").notNull(),
+  fromAmountBaseUnits: text("from_amount_base_units").notNull().default("0"),
+  toAmountBaseUnits: text("to_amount_base_units").notNull().default("0"),
+  fromTokenDecimals: integer("from_token_decimals").notNull().default(18),
+  toTokenDecimals: integer("to_token_decimals").notNull().default(18),
   slippage: real("slippage").notNull(),
   status: text("status").notNull().default("pending"),
   isPrivate: boolean("is_private").notNull().default(true),
@@ -30,6 +36,8 @@ export const batchedActions = pgTable("batched_actions", {
   actionType: text("action_type").notNull(),
   description: text("description").notNull(),
   amount: real("amount").notNull(),
+  amountBaseUnits: text("amount_base_units").notNull().default("0"),
+  tokenDecimals: integer("token_decimals").notNull().default(18),
   token: text("token").notNull(),
   status: text("status").notNull().default("queued"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -41,6 +49,8 @@ export const batchedActions = pgTable("batched_actions", {
     toToken?: string;
     fromAmount?: number;
     toAmount?: number;
+    fromAmountBaseUnits?: string;
+    toAmountBaseUnits?: string;
     slippage?: number;
   }>(),
 });
@@ -66,6 +76,8 @@ export const activities = pgTable("activities", {
   type: text("type").notNull(),
   description: text("description").notNull(),
   amount: real("amount").notNull(),
+  amountBaseUnits: text("amount_base_units").notNull().default("0"),
+  tokenDecimals: integer("token_decimals").notNull().default(18),
   token: text("token").notNull(),
   valueUsd: real("value_usd").notNull(),
   isPrivate: boolean("is_private").notNull().default(true),
@@ -135,6 +147,8 @@ export const shadowBalances = pgTable("shadow_balances", {
   tokenMint: text("token_mint").notNull(),
   tokenSymbol: text("token_symbol").notNull(),
   shadowAmount: real("shadow_amount").notNull().default(0),
+  shadowAmountBaseUnits: text("shadow_amount_base_units").notNull().default("0"),
+  tokenDecimals: integer("token_decimals").notNull().default(18),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -165,7 +179,9 @@ export const stealthPayments = pgTable("stealth_payments", {
   recipientHint: text("recipient_hint"), // Optional hint for intended recipient (not their actual address)
   tokenMint: text("token_mint").notNull(),
   tokenSymbol: text("token_symbol").notNull(),
-  amount: real("amount").notNull(), // For non-ZK payments, or 0 for ZK payments
+  amount: real("amount").notNull(), // Legacy display amount. Exact accounting uses amountBaseUnits.
+  amountBaseUnits: text("amount_base_units").notNull().default("0"),
+  tokenDecimals: integer("token_decimals").notNull().default(18),
   valueUsd: real("value_usd").notNull().default(0),
   status: text("status").notNull().default("pending"), // pending, claimed, expired, cancelled
   claimCode: text("claim_code").notNull().unique(), // Secret code to claim payment
@@ -196,6 +212,8 @@ export const multisigWallets = pgTable("multisig_wallets", {
   // Merkle root of member pubkey hashes - for ZK membership proofs
   membersMerkleRoot: text("members_merkle_root"),
   balance: real("balance").notNull().default(0),
+  balanceBaseUnits: text("balance_base_units").notNull().default("0"),
+  tokenDecimals: integer("token_decimals").notNull().default(18),
   tokenMint: text("token_mint"), // Primary token for this wallet
   tokenSymbol: text("token_symbol"),
   isActive: boolean("is_active").notNull().default(true),
@@ -233,6 +251,8 @@ export const multisigTransactions = pgTable("multisig_transactions", {
   description: text("description").notNull(),
   // Amount (for transfers)
   amount: real("amount"),
+  amountBaseUnits: text("amount_base_units"),
+  tokenDecimals: integer("token_decimals").notNull().default(18),
   tokenMint: text("token_mint"),
   tokenSymbol: text("token_symbol"),
   // Recipient (for transfers)
